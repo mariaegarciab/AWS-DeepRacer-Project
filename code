@@ -1,0 +1,51 @@
+import math
+
+# Constants
+REWARD_MIN = 1e-3
+MAX_SPEED = 4.0
+STEERING_THRESHOLD = 20.0 # degrees, adjust as needed for your track
+
+def reward_function(params):
+    # Extract parameters
+    all_wheels_on_track = params['all_wheels_on_track']
+    speed = params['speed']
+    heading = params['heading']
+    steering = params['steering_angle']
+    waypoints = params['waypoints']
+    closest_waypoints = params['closest_waypoints']
+    
+    # Penalty for being off-track
+    if not all_wheels_on_track:
+        return REWARD_MIN
+    
+    # Calculate the reward for the speed
+    speed_reward = speed / MAX_SPEED
+    
+    # Calculate the direction of the track from waypoints
+    next_point = waypoints[closest_waypoints[1]]
+    prev_point = waypoints[closest_waypoints[0]]
+    track_direction = math.atan2(next_point[1] - prev_point[1], next_point[0] - prev_point[0])
+    track_direction = math.degrees(track_direction) % 360
+
+    # Calculate the difference between the track direction and the heading direction of the car
+    direction_diff = abs(track_direction - heading)
+    if direction_diff > 180:
+        direction_diff = 360 - direction_diff
+
+    # Reward when the car is heading in the right direction
+    direction_reward = 1 - (direction_diff / 180.0)
+    if direction_diff > 30:  # Apply penalty if off by a significant angle
+        direction_reward *= 0.5
+    
+    # Determine if the car is approaching a curve based on steering angle
+    if abs(steering) > STEERING_THRESHOLD:
+        # Approaching a curve, encourage "slow in"
+        speed_reward *= 0.5
+    else:
+        # Exiting a curve or on a straight section, encourage "fast out"
+        speed_reward *= 1.2
+
+    # Combine the rewards
+    total_reward = (speed_reward + direction_reward) / 2
+    
+    return total_reward
