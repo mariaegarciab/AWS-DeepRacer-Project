@@ -1,3 +1,5 @@
+![image](https://github.com/mariaegarciab/AWS-DeepRacer-Project/assets/138514984/36e9fdc8-94a6-43ac-8793-7e401262717f)
+
 # AWS-DeepRacer-Project
 This repository contains all of my training scripts, models, and analysis for participating in the AWS DeepRacer League. The goal of this project is to develop and refine reinforcement learning models capable of mastering race tracks autonomously.
 
