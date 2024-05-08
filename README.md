@@ -83,4 +83,3 @@ This project is licensed under the Apache 2.0 License - see the LICENSE file for
 
 ## Acknowledgments
 Thanks to AWS DeepRacer for providing the platform.
-Thanks to DataCamp for providing excellent resources to brush up on my Python skills.
